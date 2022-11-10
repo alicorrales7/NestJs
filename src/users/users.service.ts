@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './schemas/user.schema';
+import { User } from './interfaces/user';
 import { UserRepository } from './repository/user.repository';
 import { userDTO } from './dto/user.dto';
 
@@ -7,8 +7,23 @@ import { userDTO } from './dto/user.dto';
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  async loginS(user){
+    const uservalid = await this.userRepository.loginR(user)
+    return uservalid;
+  }
+
+  async loginSA(username,password){
+    const uservalid = await this.userRepository.loginA(username,password)
+    return uservalid;
+  }
+
   async create(userDTO: userDTO): Promise<User[] | User> {
     const newUser = await this.userRepository.create(userDTO);
+    return newUser;
+  }
+
+  async getUsername(username): Promise<User> {
+    const newUser = await this.userRepository.findUser(username);
     return newUser;
   }
 

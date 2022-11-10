@@ -6,38 +6,54 @@ import {
   Delete,
   Body,
   Param,
+  Request,
+  UseGuards,
+  Bind,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { userDTO } from './dto/user.dto';
+import * as bcrypt from 'bcrypt';
 
-@Controller('users')
+
+@Controller()
 export class UsersController {
-  constructor(private readonly userServices: UsersService) {}
+  constructor(
+    private readonly userServices: UsersService
+  ) {}
 
-  @Post()
+  @Post('/login')
+  login(@Body() user){
+    const userV = this.userServices.loginS(user);
+    return userV;
+  }
+
+  @Post('/user')
   postUser(@Body() user: userDTO) {
-    const userOb = this.userServices.create(user);
+    const salRounds = 10;
+    const hash = bcrypt.hashSync(user.password, salRounds);
+    const userCryps = { ...user, password: hash };
+    const userOb = this.userServices.create(userCryps);
     return userOb;
   }
 
-  @Get()
+  @Get('/user')
   getAllUser() {
     return this.userServices.getAllUser();
   }
 
-  @Get(':_id')
+  @Get('/user/:_id')
   getUser(@Param() id) {
     const getAll = this.userServices.getOne(id);
     return getAll;
   }
 
-  @Put(':_id')
+  @Put('/user/:_id')
   putUser(@Body() user, @Param() id) {
     const userOb = this.userServices.update(user, id);
     return userOb;
   }
 
-  @Delete(':_id')
+  @Delete('/user/:_id')
   deleteUser(@Param() id) {
     const userOb = this.userServices.delete(id);
     return userOb;

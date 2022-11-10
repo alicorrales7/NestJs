@@ -4,5 +4,6 @@ export interface User {
   age: number;
   address: string;
   ss: string;
-  user: string;
+  username: string;
+  password: string;
 }

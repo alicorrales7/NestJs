@@ -3,19 +3,17 @@ import { User } from './interfaces/user';
 import { UserRepository } from './repository/user.repository';
 import { userDTO } from './dto/user.dto';
 
-
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
-  async loginS(user){
-    const uservalid = await this.userRepository.loginR(user)
+  async loginS(user) {
+    const uservalid = await this.userRepository.loginR(user);
     return uservalid;
   }
 
-  async loginSA(username,password){
-    const uservalid = await this.userRepository.loginA(username,password)
+  async loginSA(username, password) {
+    const uservalid = await this.userRepository.loginA(username, password);
     return uservalid;
   }
 

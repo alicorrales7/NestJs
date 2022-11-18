@@ -13,6 +13,8 @@ import {
 import { UsersService } from './users.service';
 import { userDTO } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 
 
 @Controller()
@@ -20,12 +22,14 @@ export class UsersController {
   constructor(
     private readonly userServices: UsersService
   ) {}
-
+  
+  
   @Post('/login')
   login(@Body() user){
     const userV = this.userServices.loginS(user);
     return userV;
   }
+
 
   @Post('/user')
   postUser(@Body() user: userDTO) {
@@ -36,6 +40,7 @@ export class UsersController {
     return userOb;
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Get('/user')
   getAllUser() {
     return this.userServices.getAllUser();

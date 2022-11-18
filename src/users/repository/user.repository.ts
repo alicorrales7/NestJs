@@ -14,7 +14,6 @@ export class UserRepository {
   async loginR(user){
     const compare = await this.UserModel.findOne({"username": user.username})
     const result = bcrypt.compareSync(user.password, compare.password)
-    console.log(result)
     return result;
   }
 
